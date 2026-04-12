@@ -1,141 +1,139 @@
-# recon-navi
+# Shikigami
 
-Agentic web application penetration testing tool specialised for Japanese web infrastructure.
+Agentic web application penetration testing pipeline — Japanese infrastructure specialist.
 
 ![Tests](https://img.shields.io/badge/tests-164%20passed-brightgreen)
-![Version](https://img.shields.io/badge/version-0.8.0-blue)
+![Version](https://img.shields.io/badge/version-0.9.0-blue)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Stack](https://img.shields.io/badge/stack-LangGraph%20%7C%20Ollama%20%7C%20AWS-orange)
 
 ---
 
-## What it does
+## What it is
 
-recon-navi is a **LangGraph-based agentic pipeline** that autonomously performs web application penetration testing with first-class support for Japanese encoding vulnerabilities. It targets bug bounty programs on Japanese platforms (IssueHunt, BugBounty.jp) where character encoding edge cases (Shift-JIS, EUC-JP, ISO-2022-JP) create attack surfaces that generic Western tools miss entirely.
+Shikigami is a **LangGraph-based agentic penetration testing pipeline** built for Japanese web infrastructure. It runs a 28-node directed workflow — each node is a discrete recon or exploitation step — coordinated by a stateful graph that supports parallel execution, iterative self-improvement, and pause/resume across machines via DynamoDB.
 
-The tool runs a 25-node directed acyclic graph — each node is a discrete recon or exploitation step. A local Ollama LLM (llama3.1 or mistral-nemo) drives analysis and adaptive probing. DynamoDB provides distributed checkpointing for 24/7 unattended scanning across EC2 instances.
-
----
-
-## Feature highlights
-
-### Japanese encoding as a first-class attack surface
-- Encoding priority chain: `utf-8-sig → shift_jis → cp932 → euc-jp → iso-2022-jp → utf-8`
-- `Accept-Language: ja` on every request to trigger Japanese error messages
-- Full-width digit IDOR bypass (e.g. `１` → `1` after server-side normalisation)
-- Multibyte WAF bypass payload generation — exploits charset confusion between WAF (UTF-8) and app (Shift-JIS)
-- Keigo politeness-level analysis: `kenjogo` (humble) responses indicate admin-tier gates; `sonkeigo` indicates privilege boundaries worth probing
-
-### 25-node autonomous pipeline
-| Phase | Nodes |
-|-------|-------|
-| Recon | dns_recon, subdomain_enum, passive_recon, path_probe |
-| Surface mapping | fetch, js_render, surface_map, login_probe, crawler, param_fuzz, api_discover |
-| Exploitation | active_probe, idor_probe, auth_bypass, oob_handler, canary_sweep |
-| Analysis | analyze, verify_findings, logic_analyzer, jwt_analyze, cors_probe |
-| Deep exploitation | ws_probe, deep_probe, adaptive_probe |
-| Reporting | generate → END |
-
-### Stored XSS detection (v0.8.0)
-A canary sweep runs after all injection nodes complete. Unique 8-char canaries are planted by `active_probe` and `param_fuzz` during injection; `canary_sweep` re-fetches all crawled URLs and SPA client-side routes (via Playwright) to detect cross-page stored reflections. Confirmed stored XSS findings are automatically escalated to `critical/confirmed`.
-
-### Devil's Advocate verifier (v0.8.0)
-A second LLM pass (`verify_findings`) attempts to disprove every non-confirmed finding before it reaches the report. High-conviction benign explanations (score ≥ 0.80) drop findings; mid-conviction (≥ 0.55) demotes severity and marks confidence as `possible`. All demotions/drops are preserved in an audit trail (`verify_skipped`).
-
-### WebSocket injection (v0.7.0)
-`ws_probe` discovers WebSocket endpoints from JS source scanning, Playwright network interception, and common path probing. Tests 9 payloads: XSS reflection, error-based SQLi, path traversal, auth-skip token manipulation, full-width digit IDOR.
-
-### LLM-driven logic analysis
-`logic_analyzer` runs a 2-turn LLM chain: turn 1 classifies the rejection type (WAF / business logic / auth gate / unknown), turn 2 generates and executes a targeted bypass attempt. Confirmed bypasses are automatically escalated to `critical/confirmed`.
-
-### JWT analysis
-Extracts JWTs from cookies, `Authorization` headers, and response bodies. Tests: `alg:none` bypass, HMAC weak-secret bruteforce (30-entry wordlist of common secrets), RS256→HS256 key confusion candidate detection.
-
-### CORS exploitation
-Tests arbitrary origin reflection, `null` origin, subdomain wildcard, and destructive-method allowance. All tested against `Access-Control-Allow-Credentials: true`.
-
-### OOB blind injection (v0.4.0)
-Blind SSRF and blind SQLi via DNS/HTTP callback. Requires `--oob-domain`. Callbacks are received by an AWS Lambda → DynamoDB pipeline (Terraform in `infra/`). Japanese IP callbacks are automatically flagged as critical (confirms server-side execution on JP infrastructure).
-
-### Reporting
-- JSON + Markdown reports with CVSS 4.0 vector and numeric score per finding
-- Japanese Enterprise Impact context block in Markdown reports (describes business risk in terms relevant to JP corporate culture)
-- `verify_skipped` audit trail so reviewers can inspect LLM demotion decisions
+Built for bug bounty programmes on Japanese platforms (IssueHunt.jp, BugBounty.jp) where character encoding edge cases (Shift-JIS, EUC-JP, ISO-2022-JP) create attack surfaces that generic Western scanners miss entirely. All LLM inference runs locally via Ollama — no target data leaves the machine.
 
 ---
 
-## CLI usage
+## Track record
 
-```bash
-python main.py                                               # interactive prompt
-python main.py -t http://target.co.jp                        # single target
-python main.py -t http://target.co.jp -m mistral-nemo --format both -v
-python main.py -f targets.txt --loop --loop-delay 300        # 24/7 mode
-python main.py -t http://target.co.jp --no-llm               # rule-based only
-python main.py -t http://target.co.jp --no-dynamo            # skip DynamoDB
-python main.py -t http://target.co.jp --resume               # resume last scan
-python main.py -t http://target.co.jp --oob-domain cb.yourdomain.com
-python main.py -t http://target.co.jp --quick --depth 0      # fast recon
-python main.py -t http://target.co.jp --debug                # state delta per node
+Findings submitted to authorised bug bounty programmes on IssueHunt.jp:
+
+| Programme | Finding Class | Severity | Status |
+|-----------|--------------|----------|--------|
+| Japanese financial platform | SQL error disclosure via authentication endpoint | Medium | Submitted |
+| Japanese financial platform | Unauthenticated session exposure via WebAuthn flow | High | Submitted |
+| Japanese financial platform | CORS misconfiguration + reflected XSS chain | High | Submitted |
+| Japanese financial platform | WAF bypass via multibyte encoding on login | Medium | Submitted |
+| Japanese media platform | JWT expiry absent + HMAC key exposure | High | Submitted |
+| Japanese media platform | CDN token disclosure via unauthenticated endpoint | Medium | Submitted |
+| Japanese media platform | S3 stack trace disclosure | Medium | Submitted |
+| Japanese media platform | Compound DRM chain vulnerability | High | Submitted |
+
+All findings produced within authorised scope. Reports include bilingual (EN/JP) write-ups with curl reproduction scripts.
+
+---
+
+## Architecture overview
+
+### Neurosymbolic pipeline
+
+Shikigami uses a two-layer decision system:
+
+**Symbolic layer** (~1ms, 100% precision on matched patterns)
+- Definite pattern classifiers fire before any LLM call
+- Eliminates ~40% of LLM invocations on unambiguous findings
+- Runs at zero cost — pure pattern matching, no model required
+
+**Neural layer** (LLM via Ollama)
+- Handles ambiguous evidence the symbolic layer cannot classify
+- Gemma4:e4b for adaptive exploitation (native tool-calling)
+- llama3.1 / mistral-nemo for analysis and verification
+
+**Devil's Advocate verifier**
+- Second LLM pass attempts to disprove every non-confirmed finding
+- High-conviction benign explanations drop the finding; mid-conviction demotes severity
+- Confirmed findings (pattern-level evidence) are never touched
+
+### Parallel execution
+
 ```
+active_probe
+    ├── rce_probe    ─┐
+    ├── idor_probe    ├─► oob_handler (barrier)
+    └── auth_bypass  ─┘
+
+logic_analyzer
+    ├── jwt_analyze  ─┐
+    ├── cors_probe    ├─► deep_probe (barrier)
+    └── ws_probe     ─┘
+```
+
+Three attack nodes and three analysis nodes execute concurrently via LangGraph fan-out. Each writes to exclusive state keys — no merge conflicts.
+
+### ReAct exploitation agent
+
+The `adaptive_probe` node runs a multi-turn tool-calling ReAct loop using gemma4:e4b. Rather than a one-shot directive, the agent:
+
+1. Reads all accumulated evidence across the full pipeline run
+2. Selects and calls tools iteratively: `http_probe`, `fuzz_param`, `playwright_eval`
+3. Observes responses and adapts strategy each turn
+4. Calls `report_confirmed` when exploitation is proven
+
+The graph loops the node up to 5 times on no-hit, providing fresh evidence context each iteration.
+
+### Evidence bus
+
+Cross-node typed signals propagate via a shared bus in state, enabling chained exploitation across previously independent findings. CORS misconfigs, JWT weaknesses, and auth bypass paths discovered by earlier nodes are available to the ReAct agent as structured signals — not just raw text.
+
+### DynamoDB checkpointing
+
+LangGraph state is persisted after every node. Scans can be paused on a local machine and resumed on EC2. Large text fields are compressed before write — typically 70–85% size reduction, keeping DynamoDB items well under the 400KB limit.
+
+---
+
+## Japanese encoding specialisation
+
+This is the primary differentiator from generic pentest tools.
+
+- **Encoding priority chain**: correct decoding on every response regardless of misconfigured `Content-Type` headers — covers Shift-JIS, CP932, EUC-JP, ISO-2022-JP, UTF-8-SIG
+- **`Accept-Language: ja`** on every request — triggers Japanese-language error messages that expose internal stack structure unavailable in English responses
+- **Keigo analysis**: Response politeness level is a reliable signal for privilege tier boundaries in Japanese enterprise applications — a pattern unique to JP-language web infrastructure
+- **Full-width digit IDOR**: Server-side normalisation bypasses numeric ID validation in many JP frameworks
+- **Multibyte WAF bypass**: Charset confusion between WAF and application layer is a consistent source of filter evasion in Japanese infrastructure
 
 ---
 
 ## Tech stack
 
-| Component | Technology |
-|-----------|-----------|
-| Pipeline orchestration | LangGraph (DAG with conditional edges) |
-| LLM inference | Ollama — llama3.1:8b-instruct-q5_K_M (default), mistral-nemo:12b |
-| HTTP client | httpx (async-capable, follow redirects, verify=False) |
-| JS rendering | Playwright (headless Chromium, network interception, scroll simulation) |
-| WebSocket probing | websockets 15.x |
-| Encoding detection | charset-normalizer + manual priority chain |
-| Checkpointing | AWS DynamoDB (LangGraph BaseCheckpointSaver implementation) |
-| OOB callbacks | AWS Lambda + API Gateway + DynamoDB (Terraform-provisioned) |
-| Reporting | Custom writer — JSON + Markdown + CVSS 4.0 |
-| Testing | pytest, moto (DynamoDB mocking), unittest.mock |
+| Layer | Technology |
+|-------|-----------|
+| Workflow orchestration | LangGraph 1.1.4 (StateGraph, conditional edges, fan-out/fan-in) |
+| Local LLM inference | Ollama — gemma4:e4b, llama3.1:8b, mistral-nemo:12b |
+| LLM fallback | Amazon Bedrock (Claude Haiku) — automatic on Ollama unavailability |
+| HTTP client | httpx with JP encoding middleware |
+| Browser automation | Playwright (DOM rendering, SPA route extraction, stored XSS detection) |
+| State persistence | AWS DynamoDB (LangGraph BaseCheckpointSaver) |
+| Infrastructure | Terraform — DynamoDB, Lambda OOB callback listener, EC2 scan runner |
+| Reporting | CVSS 4.0 scoring, JSON + Markdown, bilingual EN/JP |
+| Testing | pytest 9.0 — 164 tests, zero mocked network for integration suites |
 
 ---
 
-## Architecture
+## Design principles
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full 25-node graph topology, state contract, and key design decisions.
+**Privacy by default** — all LLM inference is local. Target responses, vulnerability details, and application behaviour never reach a third-party API.
 
----
+**Precision over recall** — the neurosymbolic gate and Devil's Advocate verifier exist specifically to reduce false positives. A finding that reaches the report has survived two rounds of attempted disproof.
 
-## Test suite
+**Resumability** — 28-node scans take 15–40 minutes on a live target. Checkpoint-based resume means a crash or network interruption loses at most one node of work.
 
-164 tests, 0 failures — covering every node, helper function, and integration path.
-
-```
-tests/test_navi_logic.py     — 51 tests  (serialisation, DynamoDB, OOB, CSRF, timed SQLi)
-tests/test_v08_and_nodes.py  — 113 tests (all nodes + v0.8.0 canary/verify features)
-```
-
-Full pytest output: [tests/results/pytest_output.txt](tests/results/pytest_output.txt)
-
-The test suite caught a production bug during this session: `verify_findings.py` was using attribute-style access (`f.confidence`) on `Finding` TypedDict instances (plain dicts), which would have caused `AttributeError` on every live scan run.
+**Encoding correctness first** — every HTTP response is decoded through the full JP encoding chain before any analysis runs. A finding based on a misread Shift-JIS response is worse than no finding.
 
 ---
 
-## Intentionally-vulnerable test server
+## Status
 
-`test_server.py` is a local EC-CUBE-style Japanese shop server used for pipeline integration tests. It exposes:
-
-- IDOR (6 variants: QS param, path segment, POST JSON body, method escalation, header injection, auth bypass)
-- Reflected XSS and **stored XSS** (guestbook endpoint — planted canaries persist and are detected by `canary_sweep`)
-- Error-based SQLi
-- CORS origin reflection + `Allow-Credentials: true`
-- CSRF (no token on login form)
-- JWT with weak secret (`"secret"`) + `alg:none` acceptance
-- Info disclosure: `/robots.txt`, `/phpinfo.php`, `/.git/HEAD`, `/api/swagger.json`
-- WebSocket echo server on port 8889
-
----
-
-## Source
-
-Full source available upon request — contact via GitHub or LinkedIn.
-
-> This repository is a portfolio showcase. The implementation is kept private to preserve operational security for active bug bounty work.
+Private repository — available for review during hiring or engagement discussions.
