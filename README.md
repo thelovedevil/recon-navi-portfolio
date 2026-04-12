@@ -49,7 +49,7 @@ Shikigami uses a two-layer decision system:
 
 **Neural layer** (LLM via Ollama)
 - Handles ambiguous evidence the symbolic layer cannot classify
-- Gemma4:e4b for adaptive exploitation (native tool-calling)
+- adaptive exploitation (native tool-calling)
 - llama3.1 / mistral-nemo for analysis and verification
 
 **Devil's Advocate verifier**
