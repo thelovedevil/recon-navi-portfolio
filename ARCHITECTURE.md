@@ -135,13 +135,8 @@ Probe (shikigami)
 
 Provisioned via Terraform. Japanese IP callbacks are flagged as critical — they confirm server-side execution on JP infrastructure, the highest-value finding category on JP bug bounty platforms.
 
-## LLM model selection
+## LLM configuration
 
-| Model | VRAM | Role |
-|-------|------|------|
-| gemma4:e4b | ~9.6 GB | adaptive_probe ReAct agent (native tool-calling) |
-| llama3.1:8b-instruct-q5_K_M | ~5.7 GB | Default analysis + verification |
-| mistral-nemo:12b-instruct-v1-q4_K_M | ~7.5 GB | High-accuracy analysis option |
-| Claude Haiku (Bedrock) | — | Automatic fallback when Ollama unavailable |
+Shikigami supports configurable local models via Ollama with automatic Bedrock fallback. Model selection is intentionally not documented here.
 
 `--no-llm` runs the full pipeline in rule-based mode (symbolic layer only), suitable for EC2 without GPU.

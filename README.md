@@ -111,8 +111,8 @@ This is the primary differentiator from generic pentest tools.
 | Layer | Technology |
 |-------|-----------|
 | Workflow orchestration | LangGraph 1.1.4 (StateGraph, conditional edges, fan-out/fan-in) |
-| Local LLM inference | Ollama — gemma4:e4b, llama3.1:8b, mistral-nemo:12b |
-| LLM fallback | Amazon Bedrock (Claude Haiku) — automatic on Ollama unavailability |
+| Local LLM inference | Ollama (local, private) |
+| LLM fallback | Amazon Bedrock — automatic on local unavailability |
 | HTTP client | httpx with JP encoding middleware |
 | Browser automation | Playwright (DOM rendering, SPA route extraction, stored XSS detection) |
 | State persistence | AWS DynamoDB (LangGraph BaseCheckpointSaver) |
