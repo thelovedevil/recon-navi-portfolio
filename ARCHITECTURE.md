@@ -67,7 +67,7 @@ active_probe            Multi-technique injection suite
 
 ## State contract
 
-`ReconState` is a single TypedDict passed through every node. Nodes return `{**state, <changed_keys>}` — immutable update pattern.
+`ReconState` is a single TypedDict passed through every node. Nodes return partial dicts `{<changed_keys>}` — LangGraph merges them with the previous checkpoint, not `{**state, ...}`. Returning the full state from a parallel node is the source of `"Can receive only one value per step"` errors.
 
 Key fields added in v0.9.0:
 
@@ -96,8 +96,8 @@ Nodes degrade gracefully when small models produce malformed output.
 **Devil's Advocate verifier never touches `confirmed` findings.**
 Pattern-level and canary-level evidence is not subject to LLM second-guessing. Only `likely` and `possible` findings go through the adversarial review pass.
 
-**Parallel phases write to exclusive state keys.**
-`rce_probe` → `rce_findings`, `idor_probe` → `idor_hits`, `auth_bypass` → `auth_bypass_hits`. No reducer logic required — LangGraph merges by key, and keys don't overlap.
+**Parallel phases use Annotated reducers on shared accumulator keys.**
+Each parallel node writes to its own exclusive output key (`rce_findings`, `idor_hits`, `auth_bypass_hits`) but also appends to the shared `findings`, `is_vulnerable`, and `evidence_bus` accumulators. LangGraph raises `InvalidUpdateError` if two nodes return different values for the same key in the same step. These three fields carry `Annotated[T, reducer]` type annotations: `_merge_findings` deduplicates by `(vuln_type, description)`, `_or_bool` ORs the boolean, and `_merge_bus` deduplicates bus signals. Reducer logic lives entirely in `state.py` — nodes remain unaware of the parallel topology.
 
 **Evidence bus enables cross-node chaining.**
 When `cors_probe` finds a trusted origin or `jwt_analyze` finds a weak secret, those signals are written to `evidence_bus`. The `adaptive_probe` ReAct agent reads the bus summary in its context window, allowing it to chain attacks across findings from previously independent nodes.

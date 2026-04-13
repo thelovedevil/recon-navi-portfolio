@@ -71,7 +71,7 @@ logic_analyzer
     └── ws_probe     ─┘
 ```
 
-Three attack nodes and three analysis nodes execute concurrently via LangGraph fan-out. Each writes to exclusive state keys — no merge conflicts.
+Three attack nodes and three analysis nodes execute concurrently via LangGraph fan-out. Primary output keys are exclusive (`rce_findings`, `idor_hits`, `auth_bypass_hits`). Shared accumulators (`findings`, `is_vulnerable`, `evidence_bus`) carry `Annotated[T, reducer]` type annotations so LangGraph merges parallel writes correctly rather than raising `InvalidUpdateError`.
 
 ### ReAct exploitation agent
 
@@ -126,7 +126,11 @@ This is the primary differentiator from generic pentest tools.
 
 **Privacy by default** — all LLM inference is local. Target responses, vulnerability details, and application behaviour never reach a third-party API.
 
-**Precision over recall** — the neurosymbolic gate and Devil's Advocate verifier exist specifically to reduce false positives. A finding that reaches the report has survived two rounds of attempted disproof.
+**Precision over recall** — the neurosymbolic gate and Devil's Advocate verifier exist specifically to reduce false positives. A finding that reaches the report has survived two rounds of attempted disproof. Three additional false-positive vectors discovered during live scanning are defended against explicitly:
+
+- *SSTI arithmetic oracle*: The `{{7*7}}→49` check is gated behind a `ssti_oracle=True` flag — it is never applied to arbitrary page bodies, only to probe responses where the arithmetic expression was actually injected.
+- *CloudFront SPA soft-404*: Path probe and API discovery fingerprint the CDN's uniform-200 behaviour before scanning (two junk-path requests, body size comparison) and suppress results accordingly.
+- *X-Original-URL header ignored*: Auth bypass records the root-path baseline size before testing rewrite headers. A bypass response within ±1000 bytes of the homepage is classified as a non-event, not a confirmed bypass.
 
 **Resumability** — 28-node scans take 15–40 minutes on a live target. Checkpoint-based resume means a crash or network interruption loses at most one node of work.
 
