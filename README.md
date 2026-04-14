@@ -23,14 +23,14 @@ Findings submitted to authorised bug bounty programmes on IssueHunt.jp:
 
 | Programme | Finding Class | Severity | Status |
 |-----------|--------------|----------|--------|
-| Japanese financial platform | SQL error disclosure via authentication endpoint | Medium | Submitted |
-| Japanese financial platform | Unauthenticated session exposure via WebAuthn flow | High | Submitted |
-| Japanese financial platform | CORS misconfiguration + reflected XSS chain | High | Submitted |
-| Japanese financial platform | WAF bypass via multibyte encoding on login | Medium | Submitted |
-| Japanese media platform | JWT expiry absent + HMAC key exposure | High | Submitted |
-| Japanese media platform | CDN token disclosure via unauthenticated endpoint | Medium | Submitted |
-| Japanese media platform | S3 stack trace disclosure | Medium | Submitted |
-| Japanese media platform | Compound DRM chain vulnerability | High | Submitted |
+| Japanese financial platform | SQL error disclosure via authentication endpoint | Medium | Submitted | Accepted |
+| Japanese financial platform | Unauthenticated session exposure via WebAuthn flow | High | Submitted | Accepted |
+| Japanese financial platform | CORS misconfiguration + reflected XSS chain | High | Submitted | Accepted |
+| Japanese financial platform | WAF bypass via multibyte encoding on login | Medium | Submitted | Accepted |
+| Japanese media platform | JWT expiry absent + HMAC key exposure | High | Submitted | Pending |
+| Japanese media platform | CDN token disclosure via unauthenticated endpoint | Medium | Submitted | Pending |
+| Japanese media platform | S3 stack trace disclosure | Medium | Submitted | Pending |
+| Japanese media platform | Compound DRM chain vulnerability | High | Submitted | Pending |
 
 All findings produced within authorised scope. Reports include bilingual (EN/JP) write-ups with curl reproduction scripts.
 
