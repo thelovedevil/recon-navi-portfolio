@@ -11,7 +11,7 @@ Agentic web application penetration testing pipeline — Japanese infrastructure
 
 ## What it is
 
-Shikigami is a **LangGraph-based agentic penetration testing pipeline** built for Japanese web infrastructure. It runs a 28-node directed workflow — each node is a discrete recon or exploitation step — coordinated by a stateful graph that supports parallel execution, iterative self-improvement, and pause/resume across machines via DynamoDB.
+Shikigami is a **LangGraph-based agentic penetration testing pipeline** built for Japanese web infrastructure. It runs a 28-node directed workflow — each node is a discrete recon or exploitation step — coordinated by a stateful graph that supports parallel execution, iterative self-improvement.
 
 Built for bug bounty programmes on Japanese platforms (IssueHunt.jp, BugBounty.jp) where character encoding edge cases (Shift-JIS, EUC-JP, ISO-2022-JP) create attack surfaces that generic Western scanners miss entirely. All LLM inference runs locally via Ollama — no target data leaves the machine.
 
@@ -88,9 +88,6 @@ The graph loops the node up to 5 times on no-hit, providing fresh evidence conte
 
 Cross-node typed signals propagate via a shared bus in state, enabling chained exploitation across previously independent findings. CORS misconfigs, JWT weaknesses, and auth bypass paths discovered by earlier nodes are available to the ReAct agent as structured signals — not just raw text.
 
-### DynamoDB checkpointing
-
-LangGraph state is persisted after every node. Scans can be paused on a local machine and resumed on EC2. Large text fields are compressed before write — typically 70–85% size reduction, keeping DynamoDB items well under the 400KB limit.
 
 ---
 
